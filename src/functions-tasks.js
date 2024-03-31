@@ -18,7 +18,7 @@
  *
  */
 function getCurrentFunctionName() {
-  throw new Error('Not implemented');
+  return getCurrentFunctionName.name;
 }
 
 /**
@@ -32,8 +32,9 @@ function getCurrentFunctionName() {
  *   getFunctionBody(hiHello) => "function hiHello() { console.log('hello world'); }"
  *
  */
-function getFunctionBody(/* func */) {
-  throw new Error('Not implemented');
+
+function getFunctionBody(func) {
+  return func.toString();
 }
 
 /**
@@ -50,8 +51,8 @@ function getFunctionBody(/* func */) {
  *  ]) => [0, 1, 2]
  *
  */
-function getArgumentsCount(/* funcs */) {
-  throw new Error('Not implemented');
+function getArgumentsCount(funcs) {
+  return funcs.map((arg, ind) => ind);
 }
 
 /**
@@ -70,8 +71,10 @@ function getArgumentsCount(/* funcs */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  return function (number) {
+    return number ** exponent;
+  };
 }
 
 /**
@@ -87,8 +90,28 @@ function getPowerFunction(/* exponent */) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom() {
-  throw new Error('Not implemented');
+function getPolynom(...args) {
+  switch (args.length) {
+    case 0: {
+      return null;
+    }
+    case 1: {
+      return `y = ${args[0]}`;
+    }
+    case 2: {
+      const operator = args[1] >= 0 ? '+' : '-';
+      return `y = ${args[1]}x ${operator} ${args[0]} `;
+    }
+    case 3: {
+      const operator1 = args[1] >= 0 ? '+' : '-';
+      const operator2 = args[2] >= 0 ? '+' : '-';
+
+      return `y = ${args[2]}x^2 ${operator2} ${args[1]}x ${operator1} ${args[0]} `;
+    }
+    default: {
+      return null;
+    }
+  }
 }
 
 /**
