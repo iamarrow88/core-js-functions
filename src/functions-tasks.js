@@ -34,7 +34,10 @@ function getCurrentFunctionName() {
  */
 
 function getFunctionBody(func) {
-  return func.toString();
+  if (func) {
+    return func.toString();
+  }
+  return '';
 }
 
 /**
@@ -72,7 +75,7 @@ function getArgumentsCount(funcs) {
  *
  */
 function getPowerFunction(exponent) {
-  return function (number) {
+  return function res(number) {
     return number ** exponent;
   };
 }
@@ -96,17 +99,19 @@ function getPolynom(...args) {
       return null;
     }
     case 1: {
-      return `y = ${args[0]}`;
+      return function res() {
+        return args[0];
+      };
     }
     case 2: {
-      const operator = args[1] >= 0 ? '+' : '-';
-      return `y = ${args[1]}x ${operator} ${args[0]} `;
+      return function res(x) {
+        return x * args[0] + args[1];
+      };
     }
     case 3: {
-      const operator1 = args[1] >= 0 ? '+' : '-';
-      const operator2 = args[2] >= 0 ? '+' : '-';
-
-      return `y = ${args[2]}x^2 ${operator2} ${args[1]}x ${operator1} ${args[0]} `;
+      return function res(x) {
+        return x * x * args[0] + x * args[1] + args[2];
+      };
     }
     default: {
       return null;
@@ -128,8 +133,11 @@ function getPolynom(...args) {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const res = func();
+  return function memo() {
+    return res;
+  };
 }
 
 /**
@@ -147,8 +155,15 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  if (attempts !== 0) {
+    try {
+      func();
+    } catch (e) {
+      const newAttempts = attempts - 1;
+      retry(func, newAttempts);
+    }
+  }
 }
 
 /**
@@ -174,9 +189,8 @@ function retry(/* func, attempts */) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
-}
+
+function logger(/* func, logFunc */) {}
 
 /**
  * Return the function with partial applied arguments
@@ -212,8 +226,12 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let start = startFrom - 1;
+  return function a() {
+    start += 1;
+    return start;
+  };
 }
 
 module.exports = {
