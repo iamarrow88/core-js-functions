@@ -156,7 +156,7 @@ function memoize(func) {
  * retryer() => 2
  */
 function retry(func, attempts) {
-  if (attempts !== 0) {
+  if (attempts > 0) {
     try {
       func();
     } catch (e) {
@@ -164,6 +164,7 @@ function retry(func, attempts) {
       retry(func, newAttempts);
     }
   }
+  return func;
 }
 
 /**
@@ -190,7 +191,28 @@ function retry(func, attempts) {
  *
  */
 
-function logger(/* func, logFunc */) {}
+function logger(/* func, logFunc */) {
+  /* const fnString = func.toString();
+  const fnName = fnString.slice(9, fnString.indexOf('{') - 1).split('');
+  const openBracket = fnName.indexOf('(') + 1;
+
+  return function res(...args) {
+    const fnArgs = args.join(', ');
+    fnName.splice(openBracket, 0, fnArgs);
+    const actualName = fnName.join('');
+    const startStr = `${actualName} starts`;
+    const endStr = `${actualName} ends`;
+    logFunc(startStr);
+    logFunc(endStr);
+    const fnBody = `function(...args){\nlogFunc(startStr);\n${func
+      .toString()
+      .slice(func.toString().indexOf('{') + 1, -1)}\nlogFunc(
+      endStr
+    )\n}`;
+    console.log(JSON.parse(JSON.stringify(fnBody)));
+    return JSON.parse(JSON.stringify(fnBody));
+  }; */
+}
 
 /**
  * Return the function with partial applied arguments
